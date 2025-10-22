@@ -34,10 +34,9 @@ jobs:
           echo -e "{\"project_name\": \"go2rtc (via go2moon)\",\"project_owner\": \"AlexxIT / jeikobu__\",\"version\":\"${{ steps.get-go2rtc-version.outputs.release }}\"}" > release-info.json
       - id: create-release-zip
         name: Create release zip file
-        uses: vimtor/action-zip@v1.2
+        uses: montudor/action-zip@v1
         with:
-          files: go2rtc_linux_amd64 go2rtc_linux_arm go2rtc_linux_arm64 go2rtc_linux_armv6 release-info.json
-          dest: go2rtc.zip
+          args: zip -qq -r go2rtc.zip go2rtc_linux_amd64 go2rtc_linux_arm go2rtc_linux_arm64 go2rtc_linux_armv6 release-info.json
       - name: Create Release
         id: create_release
         uses: comnoco/create-release-action@v2
