@@ -39,7 +39,7 @@ jobs:
           dest: go2rtc.zip
       - name: Create Release
         id: create_release
-        uses: comnoco/create-release@v2
+        uses: comnoco/create-release-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
