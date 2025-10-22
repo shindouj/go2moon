@@ -37,28 +37,16 @@ jobs:
         uses: montudor/action-zip@v1
         with:
           args: zip -qq -r go2rtc.zip go2rtc_linux_amd64 go2rtc_linux_arm go2rtc_linux_arm64 go2rtc_linux_armv6 release-info.json
-      - name: Create Release
-        id: create_release
-        uses: comnoco/create-release-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload binaries to release
+        id: upload-release-asset
+        uses: svenstaro/upload-release-action@v2
         with:
-          tag_name: ${{ steps.get-go2rtc-version.outputs.release }}
-          release_name: ${{ steps.get-go2rtc-version.outputs.release }}
-          body: ${{ steps.get-go2rtc-version.outputs.description }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: comnoco/upload-release-asset-action@v2
-        if: ${{ success() }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./go2rtc.zip
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: go2rtc.zip
           asset_name: go2rtc.zip
-          asset_content_type: application/zip
+          tag: ${{ steps.get-go2rtc-version.outputs.release }}
+          overwrite: true
+          body: ${{ steps.get-go2rtc-version.outputs.description }}"
       - name: Exit gracefully if tag exists
         id: exit-gracefully-on-tag-exists
         if: ${{ failure() }}
