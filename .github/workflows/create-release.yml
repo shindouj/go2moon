@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.get-go2rtc-version.outputs.release }}
-          release_name: Release ${{ steps.get-go2rtc-version.outputs.release }}
+          release_name: ${{ steps.get-go2rtc-version.outputs.release }}
           body: ${{ steps.get-go2rtc-version.outputs.description }}
           draft: false
           prerelease: false
