@@ -1,3 +1,5 @@
+#!/bin/bash
+
 GO2MOON_PATH="${HOME}/go2rtc"
 GO2MOON_USER=$USER
 MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
