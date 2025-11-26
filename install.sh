@@ -1,6 +1,7 @@
 GO2MOON_PATH="${HOME}/go2rtc"
 GO2MOON_USER=$USER
 MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
+SYSTEMDDIR="/etc/systemd/system"
 
 function preflight_checks {
     if [ "$EUID" -eq 0 ]; then
