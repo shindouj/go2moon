@@ -3,12 +3,13 @@
 GO2MOON_PATH="${HOME}/go2rtc"
 GO2MOON_USER=$USER
 MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
+SERVICE_CONFIG="${HOME}/printer_data/moonraker.asvc"
 SYSTEMDDIR="/etc/systemd/system"
 
 function preflight_checks {
     if [ "$EUID" -eq 0 ]; then
         echo "[PRE-CHECK] This script must not be ran as root!"
-        exit -1
+        exit 255
     fi
 }
 
@@ -52,10 +53,10 @@ function check_download {
 }
 
 function add_updater {
-    update_section=$(grep -c '\[update_manager[a-z ]* go2rtc\]' $MOONRAKER_CONFIG || true)
+    update_section=$(grep -c '\[update_manager[a-z ]* go2rtc\]' "$MOONRAKER_CONFIG" || true)
     if [ "$update_section" -eq 0 ]; then
         echo -n "[INSTALL] Adding update manager to moonraker.conf..."
-        cat <<EOF >>$MOONRAKER_CONFIG
+        cat <<EOF >>"$MOONRAKER_CONFIG"
 
 ## go2rtc automatic update management
 [update_manager go2rtc]
@@ -69,7 +70,7 @@ EOF
 }
 
 function create_default_config {
-    cat > $HOME/go2rtc/go2rtc.yaml << EOF
+    cat > "$HOME/go2rtc/go2rtc.yaml" << EOF
 api:
   listen: ":1984"
   origin: "*"
@@ -120,6 +121,11 @@ WantedBy=multi-user.target
 EOF
 
     sudo systemctl enable go2rtc.service
+    go2moon_line=$(grep -c 'go2rtc' "$SERVICE_CONFIG" || true)
+    if [ "$go2moon_line" -eq 0 ]; then
+        echo -n "[INSTALL] Adding go2rtc service to moonraker.asvc..."
+        echo "go2rtc" >> "$MOONRAKER_CONFIG"
+    fi
 }
 
 function install_ffmpeg {
