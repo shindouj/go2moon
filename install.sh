@@ -43,6 +43,7 @@ function check_download {
         echo "[DOWNLOAD] Downloading latest go2rtc release..."
         if wget https://github.com/shindouj/go2moon/releases/latest/download/go2rtc.zip -P "$GO2MOON_PATH"; then
             unzip "$GO2MOON_PATH/go2rtc.zip" -d "$GO2MOON_PATH"
+            chmod +x "$GO2MOON_PATH/go2rtc_linux_*"
             rm "$GO2MOON_PATH/go2rtc.zip"
         else
             printf "[DOWNLOAD] Error: failed to download newest release." 
@@ -121,6 +122,8 @@ WantedBy=multi-user.target
 EOF
 
     sudo systemctl enable go2rtc.service
+    sudo systemctl start go2rtc.service
+    
     go2moon_line=$(grep -c 'go2rtc' "$SERVICE_CONFIG" || true)
     if [ "$go2moon_line" -eq 0 ]; then
         echo -n "[INSTALL] Adding go2rtc service to moonraker.asvc..."
@@ -139,6 +142,7 @@ function restart_moonraker {
 }
 
 preflight_checks
+create_default_config
 install_ffmpeg
 check_download
 add_updater
