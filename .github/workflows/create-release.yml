@@ -29,14 +29,14 @@ jobs:
           curl -L -o go2rtc_linux_arm64 https://github.com/AlexxIT/go2rtc/releases/download/${{ steps.get-go2rtc-version.outputs.release }}/go2rtc_linux_arm64
           curl -L -o go2rtc_linux_armv6 https://github.com/AlexxIT/go2rtc/releases/download/${{ steps.get-go2rtc-version.outputs.release }}/go2rtc_linux_armv6
       - id: create-release-info
-        name: Create release-info.json file
+        name: Create release_info.json file
         run: |
-          echo -e "{\"project_name\": \"go2rtc (via go2moon)\",\"project_owner\": \"AlexxIT / jeikobu__\",\"version\":\"${{ steps.get-go2rtc-version.outputs.release }}\"}" > release-info.json
+          echo -e "{\"project_name\": \"go2rtc (via go2moon)\",\"project_owner\": \"AlexxIT / jeikobu__\",\"version\":\"${{ steps.get-go2rtc-version.outputs.release }}\"}" > release_info.json
       - id: create-release-zip
         name: Create release zip file
         uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r go2rtc.zip go2rtc_linux_amd64 go2rtc_linux_arm go2rtc_linux_arm64 go2rtc_linux_armv6 release-info.json
+          args: zip -qq -r go2rtc.zip go2rtc_linux_amd64 go2rtc_linux_arm go2rtc_linux_arm64 go2rtc_linux_armv6 release_info.json
       - name: Upload binaries to release
         id: upload-release-asset
         uses: svenstaro/upload-release-action@v2
