@@ -72,9 +72,9 @@ EOF
 }
 
 function create_default_config {
-    if [ ! -f "${GO2MOON_CONFIG_PATH} ]; then
+    if [ ! -f "${GO2MOON_CONFIG_PATH}" ]; then
         echo -n "[INSTALL] Creating default config file..."
-        cat > "$HOME/go2rtc/go2rtc.yaml" << EOF
+        cat > "${GO2MOON_CONFIG_PATH}" << EOF
 api:
   listen: ":1984"
   origin: "*"
@@ -104,7 +104,7 @@ EOF
 }
 
 function create_service {
-    if [ ! -f "${$SYSTEMDDIR/go2rtc.service} ]; then
+    if [ ! -f "${SYSTEMDDIR}"/go2rtc.service ]; then
         echo -n "[INSTALL] Adding system service..."
         sudo /bin/sh -c "cat > $SYSTEMDDIR/go2rtc.service" << EOF
 [Unit]
