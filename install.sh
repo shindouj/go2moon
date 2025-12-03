@@ -1,6 +1,7 @@
 #!/bin/bash
 
 GO2MOON_PATH="${HOME}/go2rtc"
+GO2MOON_CONFIG_PATH="${GO2MOON_PATH}/go2rtc.yaml"
 GO2MOON_USER=$USER
 MOONRAKER_CONFIG="${HOME}/printer_data/config/moonraker.conf"
 SERVICE_CONFIG="${HOME}/printer_data/moonraker.asvc"
@@ -43,7 +44,7 @@ function check_download {
         echo "[DOWNLOAD] Downloading latest go2rtc release..."
         if wget https://github.com/shindouj/go2moon/releases/latest/download/go2rtc.zip -P "$GO2MOON_PATH"; then
             unzip "$GO2MOON_PATH/go2rtc.zip" -d "$GO2MOON_PATH"
-            chmod +x "$GO2MOON_PATH/go2rtc_linux_*"
+            chmod +x "$GO2MOON_PATH"/go2rtc_linux_*
             rm "$GO2MOON_PATH/go2rtc.zip"
         else
             printf "[DOWNLOAD] Error: failed to download newest release." 
@@ -71,7 +72,9 @@ EOF
 }
 
 function create_default_config {
-    cat > "$HOME/go2rtc/go2rtc.yaml" << EOF
+    if [ ! -f "${GO2MOON_CONFIG_PATH} ]; then
+        echo -n "[INSTALL] Creating default config file..."
+        cat > "$HOME/go2rtc/go2rtc.yaml" << EOF
 api:
   listen: ":1984"
   origin: "*"
@@ -97,12 +100,13 @@ webrtc:
   ice_servers:
     - urls: [ "stun:stun.l.google.com:19302" ]
 EOF
+    fi
 }
 
 function create_service {
-    
-    echo -n "[INSTALL] Adding system service..."
-    sudo /bin/sh -c "cat > $SYSTEMDDIR/go2rtc.service" << EOF
+    if [ ! -f "${$SYSTEMDDIR/go2rtc.service} ]; then
+        echo -n "[INSTALL] Adding system service..."
+        sudo /bin/sh -c "cat > $SYSTEMDDIR/go2rtc.service" << EOF
 [Unit]
 Description=Video transcoder using go2rtc
 Documentation=https://go2rtc.com/ https://github.com/AlexxIT/go2rtc
@@ -121,8 +125,9 @@ User=$GO2MOON_USER
 WantedBy=multi-user.target
 EOF
 
-    sudo systemctl enable go2rtc.service
-    sudo systemctl start go2rtc.service
+        sudo systemctl enable go2rtc.service
+        sudo systemctl start go2rtc.service
+    fi
     
     go2moon_line=$(grep -c 'go2rtc' "$SERVICE_CONFIG" || true)
     if [ "$go2moon_line" -eq 0 ]; then
@@ -142,9 +147,9 @@ function restart_moonraker {
 }
 
 preflight_checks
-create_default_config
 install_ffmpeg
 check_download
+create_default_config
 add_updater
 create_service
 restart_moonraker
