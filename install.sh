@@ -9,7 +9,7 @@ SYSTEMDDIR="/etc/systemd/system"
 
 function preflight_checks {
     if [ "$EUID" -eq 0 ]; then
-        echo "[PRE-CHECK] This script must not be ran as root!"
+        echo "[PRE-CHECK] This script must not be ran as root!\n"
         exit 255
     fi
 }
@@ -41,13 +41,13 @@ function get_go2rtc_binary {
 
 function check_download {
     if [ ! -d "${GO2MOON_PATH}" ]; then
-        echo "[DOWNLOAD] Downloading latest go2rtc release..."
-        if wget https://github.com/shindouj/go2moon/releases/latest/download/go2rtc.zip -P "$GO2MOON_PATH"; then
+        echo "[DOWNLOAD] Downloading latest go2rtc release...\n"
+        if wget -q --show-progress https://github.com/shindouj/go2moon/releases/latest/download/go2rtc.zip -P "$GO2MOON_PATH"; then
             unzip "$GO2MOON_PATH/go2rtc.zip" -d "$GO2MOON_PATH"
             chmod +x "$GO2MOON_PATH"/go2rtc_linux_*
             rm "$GO2MOON_PATH/go2rtc.zip"
         else
-            printf "[DOWNLOAD] Error: failed to download newest release." 
+            printf "[DOWNLOAD] Error: failed to download newest release.\n" 
         fi
     else
         printf "[DOWNLOAD] go2rtc already found locally. Continuing...\n\n"
@@ -73,7 +73,7 @@ EOF
 
 function create_default_config {
     if [ ! -f "${GO2MOON_CONFIG_PATH}" ]; then
-        echo -n "[INSTALL] Creating default config file..."
+        echo -n "[INSTALL] Creating default config file...\n"
         cat > "${GO2MOON_CONFIG_PATH}" << EOF
 api:
   listen: ":1984"
@@ -105,7 +105,7 @@ EOF
 
 function create_service {
     if [ ! -f "${SYSTEMDDIR}"/go2rtc.service ]; then
-        echo -n "[INSTALL] Adding system service..."
+        echo -n "[INSTALL] Adding system service...\n"
         sudo /bin/sh -c "cat > $SYSTEMDDIR/go2rtc.service" << EOF
 [Unit]
 Description=Video transcoder using go2rtc
@@ -131,18 +131,18 @@ EOF
     
     go2moon_line=$(grep -c 'go2rtc' "$SERVICE_CONFIG" || true)
     if [ "$go2moon_line" -eq 0 ]; then
-        echo -n "[INSTALL] Adding go2rtc service to moonraker.asvc..."
+        echo -n "[INSTALL] Adding go2rtc service to moonraker.asvc...\n"
         echo "go2rtc" >> "$SERVICE_CONFIG"
     fi
 }
 
 function install_ffmpeg {
-    echo -n "[INSTALL] Installing ffmpeg..."
-    sudo apt-get install ffmpeg
+    echo -n "[INSTALL] Installing ffmpeg...\n"
+    sudo apt-get -qq -y install ffmpeg
 }
 
 function restart_moonraker {
-    echo "[POST-INSTALL] Restarting Moonraker..."
+    echo "[POST-INSTALL] Restarting Moonraker...\n"
     sudo systemctl restart moonraker
 }
 
