@@ -132,7 +132,7 @@ EOF
     go2moon_line=$(grep -c 'go2rtc' "$SERVICE_CONFIG" || true)
     if [ "$go2moon_line" -eq 0 ]; then
         echo -n "[INSTALL] Adding go2rtc service to moonraker.asvc..."
-        echo "go2rtc" >> "$MOONRAKER_CONFIG"
+        echo "go2rtc" >> "$SERVICE_CONFIG"
     fi
 }
 
