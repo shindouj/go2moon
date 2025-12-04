@@ -31,7 +31,7 @@ jobs:
       - id: create-release-info
         name: Create release_info.json file
         run: |
-          echo -e "{\"project_name\": \"go2rtc (via go2moon)\",\"project_owner\": \"AlexxIT / jeikobu__\",\"version\":\"${{ steps.get-go2rtc-version.outputs.release }}\"}" > release_info.json
+          echo -e "{\"project_name\": \"go2moon\",\"project_owner\": \"shindouj\",\"version\":\"${{ steps.get-go2rtc-version.outputs.release }}\"}" > release_info.json
       - id: create-release-zip
         name: Create release zip file
         uses: montudor/action-zip@v1
