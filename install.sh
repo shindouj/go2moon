@@ -65,7 +65,6 @@ function add_updater {
 type: zip
 repo: shindouj/go2moon
 path: ~/go2rtc
-primary_branch: main
 managed_services: go2rtc
 EOF
     fi
