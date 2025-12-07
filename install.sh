@@ -57,7 +57,7 @@ function check_download {
 function add_updater {
     update_section=$(grep -c '\[update_manager[a-z ]* go2rtc\]' "$MOONRAKER_CONFIG" || true)
     if [ "$update_section" -eq 0 ]; then
-        printf "[INSTALL] Adding update manager to moonraker.conf..."
+        printf "[INSTALL] Adding update manager to moonraker.conf...\n"
         cat <<EOF >>"$MOONRAKER_CONFIG"
 
 ## go2rtc automatic update management
@@ -136,7 +136,7 @@ EOF
 }
 
 function install_ffmpeg {
-    printf -n "[INSTALL] Installing ffmpeg...\n"
+    printf "[INSTALL] Installing ffmpeg...\n"
     sudo apt-get -qq -y install ffmpeg
 }
 
