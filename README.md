@@ -1,4 +1,7 @@
 # go2moon
+
+Find a quick installation tutorial here: https://guides.jeikobu.net/go2rtc/
+
 This project aims to make updating go2rtc painfully easy on 3D printers. This project **does not** 
 offer any new features for go2rtc and does not supersede any existing installations. 
 
