@@ -45,6 +45,7 @@ jobs:
           file: go2rtc.zip
           asset_name: go2rtc.zip
           tag: ${{ steps.get-go2rtc-version.outputs.release }}
+          release_name: ${{ steps.get-go2rtc-version.outputs.release }}
           overwrite: false
           body: ${{ steps.get-go2rtc-version.outputs.description }}"
       - name: Exit gracefully if tag exists
